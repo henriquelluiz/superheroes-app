@@ -61,7 +61,7 @@ fun TopAppBar(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun SuperheroAppPreview() {
-    SuperheroesTheme {
+    SuperheroesTheme(darkTheme = true) {
         SuperheroApp()
     }
 }

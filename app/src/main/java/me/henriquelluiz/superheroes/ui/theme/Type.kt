@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.sp
 import me.henriquelluiz.superheroes.R
 
 val Cabin = FontFamily(
-    Font(R.font.cabin, FontWeight.Normal),
+    Font(R.font.cabin_regular, FontWeight.Normal),
     Font(R.font.cabin_bold, FontWeight.Bold)
 )
 
