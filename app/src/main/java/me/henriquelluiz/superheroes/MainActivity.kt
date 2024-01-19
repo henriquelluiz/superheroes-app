@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,11 +28,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import me.henriquelluiz.superheroes.model.Hero
@@ -88,7 +89,10 @@ fun SuperheroCard(hero: Hero, modifier: Modifier = Modifier) {
             SuperheroInfo(
                 name = hero.nameRes,
                 description = hero.descriptionRes,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .background(Color.Transparent)
+                    .align(Alignment.CenterVertically)
+                    .weight(1f)
             )
             Spacer(modifier = Modifier.width(16.dp))
             SuperheroIcon(
@@ -132,9 +136,7 @@ fun SuperheroInfo(
 
         Text(
             text = stringResource(description),
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
