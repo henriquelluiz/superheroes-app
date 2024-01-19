@@ -2,6 +2,14 @@ package me.henriquelluiz.superheroes
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,12 +23,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,23 +44,42 @@ import me.henriquelluiz.superheroes.model.Hero
 import me.henriquelluiz.superheroes.model.HeroesRepository
 import me.henriquelluiz.superheroes.ui.theme.SuperheroesTheme
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun HeroList(
     heroes: List<Hero>,
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues = PaddingValues(0.dp)
 ) {
-    LazyColumn(contentPadding = paddingValues) {
-        items(heroes) {
-            HeroCard(
-                hero = it,
-                modifier = Modifier
-                    .padding(
-                        bottom = 8.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
-            )
+    val visibleState = remember {
+        MutableTransitionState(false).apply { targetState = true }
+    }
+
+    AnimatedVisibility(
+        visibleState = visibleState,
+        enter = fadeIn(
+            animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy)
+        ),
+        exit = fadeOut(),
+        modifier = modifier
+    ) {
+        LazyColumn(contentPadding = paddingValues) {
+            itemsIndexed(heroes) {index, hero ->
+                HeroCard(
+                    hero = hero,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .animateEnterExit(
+                            enter = slideInVertically(
+                                animationSpec = spring(
+                                    stiffness = Spring.StiffnessLow,
+                                    dampingRatio = Spring.DampingRatioLowBouncy
+                                ),
+                                initialOffsetY = { it * (index + 1) }
+                            )
+                        )
+                )
+            }
         }
     }
 }
