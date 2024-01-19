@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,9 +38,10 @@ import me.henriquelluiz.superheroes.ui.theme.SuperheroesTheme
 @Composable
 fun HeroList(
     heroes: List<Hero>,
-    //modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(0.dp)
 ) {
-    LazyColumn {
+    LazyColumn(contentPadding = paddingValues) {
         items(heroes) {
             HeroCard(
                 hero = it,
