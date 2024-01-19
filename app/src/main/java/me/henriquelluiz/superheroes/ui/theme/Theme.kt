@@ -2,6 +2,7 @@ package me.henriquelluiz.superheroes.ui.theme
 
 import android.app.Activity
 import android.os.Build
+import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -10,6 +11,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -99,9 +101,7 @@ fun SuperheroesTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            setUpEdgeToEdge(view, darkTheme)
         }
     }
 
@@ -111,4 +111,19 @@ fun SuperheroesTheme(
         shapes = Shapes,
         content = content
     )
+}
+
+/**
+ * Sets up edge-to-edge for the window of this [view]. The system icon colors are set to either
+ * light or dark depending on whether the [darkTheme] is enabled or not.
+ */
+private fun setUpEdgeToEdge(view: View, darkTheme: Boolean) {
+    val window = (view.context as Activity).window
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    window.statusBarColor = Color.Transparent.toArgb()
+    val navigationBarColor = Color.Transparent.toArgb()
+    window.navigationBarColor = navigationBarColor
+    val controller = WindowCompat.getInsetsController(window, view)
+    controller.isAppearanceLightStatusBars = !darkTheme
+    controller.isAppearanceLightNavigationBars = !darkTheme
 }
